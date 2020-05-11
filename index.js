@@ -13,6 +13,12 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static("public"));
 
+// Send "Content-Security-Policy" HTTP header to prevent XSS
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", "script-src 'self'");
+  return next();
+});
+
 app.engine("mustache", mustacheExpress());
 app.set("view engine", "mustache");
 app.set("views", __dirname + "/views");
